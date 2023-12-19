@@ -1,7 +1,7 @@
-package com.boomers.www.discover_my_city;
+package com.boomers.www.discover_my_city.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.boomers.www.discover_my_city.Coordinate;
+
 import java.util.UUID;
 
 public class POI {
@@ -11,7 +11,7 @@ public class POI {
   private Coordinate coordinate;
   private Status status;
 
-  private static List<POI> pois = new ArrayList<>();
+
 
   public POI(String name, String description, Coordinate coordinate) {
     this.id = UUID.randomUUID().toString();
@@ -19,20 +19,6 @@ public class POI {
     this.description = description;
     this.coordinate = coordinate;
     this.status = Status.IN_APPROVAL;
-  }
-
-  public POI approve() {
-    this.status = Status.APPROVED;
-    return this;
-  }
-
-  public POI save() {
-    pois.add(this);
-    return this;
-  }
-
-  public static List<POI> getPois() {
-    return POI.pois;
   }
 
   public String getId() {
@@ -66,6 +52,8 @@ public class POI {
   public Status getStatus() {
     return this.status;
   }
+
+  public void setStatus(Status status) { this.status = status; }
 
   @Override
   public String toString() {

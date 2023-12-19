@@ -1,23 +1,28 @@
 package com.boomers.www.discover_my_city;
 
+import com.boomers.www.discover_my_city.model.POI;
+import com.boomers.www.discover_my_city.service.POIService;
+
 import java.util.UUID;
 
 public class Contributor {
   private final String id;
+  private final POIService poiService;
   private String name;
   private String surname;
   private String email;
 
-  public Contributor(String name, String surname, String email) {
+  public Contributor(String name, String surname, String email, POIService poiService) {
     this.id = UUID.randomUUID().toString();
     this.name = name;
     this.surname = surname;
     this.email = email;
+    this.poiService = poiService;
   }
 
   public POI createPOI(String name, String description, Coordinate coordinate) {
     POI poi = new POI(name, description, coordinate);
-    return poi.save();
+    return poiService.create(poi);
   }
 
   public String getId() {
