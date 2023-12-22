@@ -2,6 +2,7 @@ package com.boomers.www.discover_my_city.model;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Itinerary {
   private String id;
@@ -113,5 +114,20 @@ public class Itinerary {
 
   public void setStatus(Status status) {
     this.status = status;
+  }
+
+  @Override
+  public String toString() {
+    String json = """
+        {
+            "id": "%s",
+            "name": "%s",
+            "description": "%s",
+            "status": "%s",
+            "isTemporary": %s,
+            "pois": [%s],
+        }
+      """;
+    return String.format(json, this.id, this.name, this.description, this.status, this.isTemporary(), this.getPois().stream().map(POI::toString).collect(Collectors.joining(",\n")));
   }
 }

@@ -59,7 +59,12 @@ public class POIRepository {
     poiMongo.setStatus(poi.getStatus());
     poiMongo.setCoordinate(poi.getCoordinate());
     // TODO mapper
-    this.repository.save(poiMongo);
-    return poi;
+    com.boomers.www.discover_my_city.persistance.model.POI saved = this.repository.save(poiMongo);
+    return new POI(
+        saved.getId(),
+        saved.getName(),
+        saved.getDescription(),
+        saved.getCoordinate(),
+        saved.getStatus());
   }
 }

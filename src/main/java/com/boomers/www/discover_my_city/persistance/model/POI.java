@@ -1,6 +1,6 @@
 package com.boomers.www.discover_my_city.persistance.model;
 
-import com.boomers.www.discover_my_city.Coordinate;
+import com.boomers.www.discover_my_city.model.Coordinate;
 import com.boomers.www.discover_my_city.model.Status;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

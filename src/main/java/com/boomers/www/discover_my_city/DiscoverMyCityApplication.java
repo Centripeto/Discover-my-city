@@ -1,8 +1,6 @@
 package com.boomers.www.discover_my_city;
 
-import com.boomers.www.discover_my_city.model.Contributor;
-import com.boomers.www.discover_my_city.model.POI;
-import com.boomers.www.discover_my_city.model.Status;
+import com.boomers.www.discover_my_city.model.*;
 import com.boomers.www.discover_my_city.persistance.repository.MongoItineraryRepository;
 import com.boomers.www.discover_my_city.persistance.repository.MongoPOIRepository;
 import com.boomers.www.discover_my_city.repository.ItineraryRepository;
@@ -45,6 +43,8 @@ public class DiscoverMyCityApplication implements CommandLineRunner {
     POIService poiService = new POIService(poiRepository);
     ItineraryRepository itineraryRepository = new ItineraryRepository(mongoItineraryRepository);
     ItineraryService itineraryService = new ItineraryService(itineraryRepository);
+
+    init(poiRepository, itineraryRepository);
 
     Contributor contributor = new Contributor("CONTRIBUTOR", "CONTIBUTOR", "contributor@email.it", poiService, itineraryService);
     Curatore curatore = new Curatore(poiService);
@@ -95,6 +95,11 @@ public class DiscoverMyCityApplication implements CommandLineRunner {
           itineraryService.readAll().forEach(i -> i.getPois().forEach(p -> System.out.println(p)));
           console.readLine();
           break;
+        case 6:
+          System.out.println("Lista Itinerari: ");
+          this.mongoItineraryRepository.findAllDeep().forEach(System.out::println);
+          console.readLine();
+          break;
         case 10:
           System.out.println("Fine");
           exit = true;
@@ -103,6 +108,18 @@ public class DiscoverMyCityApplication implements CommandLineRunner {
       }
     }
   }
+
+  private void init (POIRepository poiRepository, ItineraryRepository itineraryRepository) {
+    POI piazza = poiRepository.create(new POI("piazza", "piazza principale", new Coordinate(0, 0), Status.APPROVED));
+    POI municipio = poiRepository.create(new POI("municipio", "municipio città", new Coordinate(0, 0), Status.APPROVED));
+    POI chiesa = poiRepository.create(new POI("chiesa", "chiesa madre", new Coordinate(0, 0), Status.APPROVED));
+    POI monumento = poiRepository.create(new POI("monumento", "monumento ai caduti", new Coordinate(0, 0), Status.IN_APPROVAL));
+
+    itineraryRepository.create(new Itinerary("Alla scoperta del comune", "Punti di interesse principali del comune", Arrays.asList(piazza, municipio), false, null, null, Status.APPROVED));
+    itineraryRepository.create(new Itinerary("Luoghi di culto", "Luoghi di culto principali del comune", Arrays.asList(chiesa), false, null, null, Status.APPROVED));
+  }
+
+
 
   public String getMenu() {
     return """
@@ -113,6 +130,7 @@ public class DiscoverMyCityApplication implements CommandLineRunner {
         3) lista punti interesse approvati
         4) approva punto interesse
         5) crea itinerario
+        6) mostra itinerari
         10) exit
         
         """;

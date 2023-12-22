@@ -1,6 +1,5 @@
 package com.boomers.www.discover_my_city.model;
 
-import com.boomers.www.discover_my_city.Coordinate;
 import com.boomers.www.discover_my_city.service.ItineraryService;
 import com.boomers.www.discover_my_city.service.POIService;
 

@@ -1,7 +1,5 @@
 package com.boomers.www.discover_my_city.model;
 
-import com.boomers.www.discover_my_city.Coordinate;
-
 public class POI {
   private String id;
   private String name;

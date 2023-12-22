@@ -1,6 +1,7 @@
 package com.boomers.www.discover_my_city.persistance.model;
 
 import com.boomers.www.discover_my_city.model.Status;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,7 +13,7 @@ public class Itinerary {
   @Id private String id;
   private String name;
   private String description;
-  private List<String> pois;
+  private List<ObjectId> pois;
   private boolean temporary;
   private LocalDateTime startDate;
   private LocalDateTime endDate;
@@ -24,7 +25,7 @@ public class Itinerary {
       String id,
       String name,
       String description,
-      List<String> pois,
+      List<ObjectId> pois,
       boolean temporary,
       LocalDateTime startDate,
       LocalDateTime endDate,
@@ -63,11 +64,11 @@ public class Itinerary {
     this.description = description;
   }
 
-  public List<String> getPois() {
+  public List<ObjectId> getPois() {
     return pois;
   }
 
-  public void setPois(List<String> pois) {
+  public void setPois(List<ObjectId> pois) {
     this.pois = pois;
   }
 

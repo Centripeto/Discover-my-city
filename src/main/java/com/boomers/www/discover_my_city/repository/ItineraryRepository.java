@@ -2,6 +2,7 @@ package com.boomers.www.discover_my_city.repository;
 
 import com.boomers.www.discover_my_city.model.Itinerary;
 import com.boomers.www.discover_my_city.persistance.repository.MongoItineraryRepository;
+import org.bson.types.ObjectId;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +23,14 @@ public class ItineraryRepository {
   }
 
   private Itinerary save(Itinerary itinerary) {
+    com.boomers.www.discover_my_city.persistance.model.Itinerary result =
+        this.mongoItineraryRepository.save(toMongo(itinerary));
+    itinerary.setId(result.getId());
+    return itinerary;
+  }
+
+  private com.boomers.www.discover_my_city.persistance.model.Itinerary toMongo(
+      Itinerary itinerary) {
     com.boomers.www.discover_my_city.persistance.model.Itinerary mongoItinerary =
         new com.boomers.www.discover_my_city.persistance.model.Itinerary();
     mongoItinerary.setId(itinerary.getId());
@@ -29,11 +38,12 @@ public class ItineraryRepository {
     mongoItinerary.setName(itinerary.getName());
     mongoItinerary.setStatus(itinerary.getStatus());
     mongoItinerary.setPois(
-        itinerary.getPois().stream().map(poi -> poi.getId()).collect(Collectors.toList()));
+        itinerary.getPois().stream()
+            .map(poi -> new ObjectId(poi.getId()))
+            .collect(Collectors.toList()));
     mongoItinerary.setTemporary(itinerary.isTemporary());
     mongoItinerary.setStartDate(itinerary.getStartDate());
     mongoItinerary.setEndDate(itinerary.getEndDate());
-    this.mongoItineraryRepository.save(mongoItinerary);
-    return itinerary;
+    return mongoItinerary;
   }
 }
