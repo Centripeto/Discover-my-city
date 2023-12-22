@@ -1,15 +1,19 @@
-package com.boomers.www.discover_my_city.model;
+package com.boomers.www.discover_my_city.persistance.model;
 
 import com.boomers.www.discover_my_city.Coordinate;
+import com.boomers.www.discover_my_city.model.Status;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "poi")
 public class POI {
-  private String id;
+  @Id private String id;
   private String name;
   private String description;
   private Coordinate coordinate;
   private Status status;
 
-  public POI() { }
+  public POI() {}
 
   public POI(String id, String name, String description, Coordinate coordinate, Status status) {
     this.id = id;
@@ -19,15 +23,12 @@ public class POI {
     this.status = status;
   }
 
-  public POI(String name, String description, Coordinate coordinate, Status status) {
-    this.name = name;
-    this.description = description;
-    this.coordinate = coordinate;
-    this.status = status;
-  }
-
   public String getId() {
     return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 
   public String getName() {
@@ -55,22 +56,10 @@ public class POI {
   }
 
   public Status getStatus() {
-    return this.status;
+    return status;
   }
 
-  public void setStatus(Status status) { this.status = status; }
-
-  @Override
-  public String toString() {
-      String json = """
-        {
-            "id": "%s",
-            "name": "%s",
-            "description": "%s",
-            "status": "%s",
-            "coordinate": %s,
-        }
-      """;
-      return String.format(json, this.id, this.name, this.description, this.status, this.coordinate);
+  public void setStatus(Status status) {
+    this.status = status;
   }
 }
