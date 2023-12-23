@@ -1,6 +1,8 @@
 package com.boomers.www.discover_my_city.service;
 
 import com.boomers.www.discover_my_city.model.POI;
+import com.boomers.www.discover_my_city.model.Status;
+import com.boomers.www.discover_my_city.model.User;
 import com.boomers.www.discover_my_city.repository.POIRepository;
 
 import java.util.List;
@@ -12,7 +14,18 @@ public class POIService {
     this.poiRepository = poiRepository;
   }
 
-  public POI create(POI poi) {
+  public POI create(POI poi, User user) {
+    switch (user.getRole()) {
+      case CONTRIBUTOR:
+        poi.setStatus(Status.IN_APPROVAL);
+        break;
+      case CURATOR:
+      case AUTH_CONTRIBUTOR:
+        poi.setStatus(Status.APPROVED);
+        break;
+      default:
+        throw new RuntimeException("Not Authorized");
+    }
     return this.poiRepository.create(poi);
   }
 

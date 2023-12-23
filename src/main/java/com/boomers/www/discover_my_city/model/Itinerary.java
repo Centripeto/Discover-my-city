@@ -16,6 +16,15 @@ public class Itinerary {
 
   public Itinerary() { }
 
+  public Itinerary(String name, String description, List<POI> pois, boolean temporary, LocalDateTime startDate, LocalDateTime endDate) {
+    this.name = name;
+    this.description = description;
+    this.pois = pois;
+    this.temporary = temporary;
+    this.startDate = startDate;
+    this.endDate = endDate;
+  }
+
   public Itinerary(
       String name,
       String description,

@@ -24,6 +24,12 @@ public class POI {
     this.status = status;
   }
 
+  public POI(String name, String description, Coordinate coordinate) {
+    this.name = name;
+    this.description = description;
+    this.coordinate = coordinate;
+  }
+
   public String getId() {
     return id;
   }

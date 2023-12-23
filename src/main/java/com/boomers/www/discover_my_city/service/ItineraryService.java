@@ -1,6 +1,8 @@
 package com.boomers.www.discover_my_city.service;
 
 import com.boomers.www.discover_my_city.model.Itinerary;
+import com.boomers.www.discover_my_city.model.Status;
+import com.boomers.www.discover_my_city.model.User;
 import com.boomers.www.discover_my_city.repository.ItineraryRepository;
 
 import java.util.List;
@@ -12,7 +14,19 @@ public class ItineraryService {
     this.itineraryRepository = itineraryRepository;
   }
 
-  public Itinerary create(Itinerary itinerary) {
+  public Itinerary create(Itinerary itinerary, User user) {
+    switch (user.getRole()) {
+      case CONTRIBUTOR:
+        itinerary.setStatus(Status.IN_APPROVAL);
+        break;
+      case CURATOR:
+      case AUTH_CONTRIBUTOR:
+        itinerary.setStatus(Status.APPROVED);
+        break;
+      default:
+        throw new RuntimeException("Not Authorized");
+    }
+
     return this.itineraryRepository.create(itinerary);
   }
 

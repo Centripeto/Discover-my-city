@@ -3,10 +3,13 @@ package com.boomers.www.discover_my_city;
 import com.boomers.www.discover_my_city.model.*;
 import com.boomers.www.discover_my_city.persistance.repository.MongoItineraryRepository;
 import com.boomers.www.discover_my_city.persistance.repository.MongoPOIRepository;
+import com.boomers.www.discover_my_city.persistance.repository.MongoUserRepository;
 import com.boomers.www.discover_my_city.repository.ItineraryRepository;
 import com.boomers.www.discover_my_city.repository.POIRepository;
+import com.boomers.www.discover_my_city.repository.UserRepository;
 import com.boomers.www.discover_my_city.service.ItineraryService;
 import com.boomers.www.discover_my_city.service.POIService;
+import com.boomers.www.discover_my_city.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,8 @@ public class DiscoverMyCityApplication implements CommandLineRunner {
   private MongoPOIRepository mongoPOIRepository;
   @Autowired
   private MongoItineraryRepository mongoItineraryRepository;
+  @Autowired
+  private MongoUserRepository mongoUserRepository;
 
   public static void main(String[] args) {
     LOG.info("STARTING THE APPLICATION");
@@ -43,10 +48,13 @@ public class DiscoverMyCityApplication implements CommandLineRunner {
     POIService poiService = new POIService(poiRepository);
     ItineraryRepository itineraryRepository = new ItineraryRepository(mongoItineraryRepository);
     ItineraryService itineraryService = new ItineraryService(itineraryRepository);
+    UserRepository userRepository = new UserRepository(mongoUserRepository);
+    UserService userService = new UserService(userRepository);
 
     init(poiRepository, itineraryRepository);
 
-    Contributor contributor = new Contributor("CONTRIBUTOR", "CONTIBUTOR", "contributor@email.it", poiService, itineraryService);
+    Contributor contributor = new Contributor("CONTRIBUTOR", "CONTIBUTOR", "contributor@email.it");
+    Admin admin = new Admin("ADMIN", "ADMIN", "admin@admin.it");
     Curatore curatore = new Curatore(poiService);
     boolean exit = false;
     while (!exit) {
@@ -54,10 +62,10 @@ public class DiscoverMyCityApplication implements CommandLineRunner {
       int choice = Integer.parseInt(console.readLine("Cosa vuoi fare? "));
       switch (choice) {
         case 1:
-          System.out.println("Creazione punto di interesse.");
+          System.out.println("Creazione punto di interesse da approvare.");
           String name = console.readLine("Inserisci nome: ");
           String description = console.readLine("Inserisci descrizione: ");
-          POI poi = contributor.createPOI(name, description, new Coordinate(0, 0));
+          POI poi = poiService.create(new POI(name, description, new Coordinate(0, 0)), contributor);
           System.out.println(poi);
           console.readLine();
           break;
@@ -83,21 +91,36 @@ public class DiscoverMyCityApplication implements CommandLineRunner {
           console.readLine();
           break;
         case 5:
-          System.out.println("Inserisci punti di interesse: ");
+          System.out.println("Creazione itinerario da approvare");
+          String itineraryName = console.readLine("Inserisci nome: ");
+          String itineraryDescription = console.readLine("Inserisci descrizione: ");
           poiService.readAll().stream()
                   .filter(p -> p.getStatus() == Status.APPROVED)
                   .map(POI::getId)
                   .forEach(System.out::println);
-          String input = console.readLine("Inserisci id separati da virgola: ");
+          String input = console.readLine("Inserisci id separati dalla virgola: ");
           List<String> ids = Arrays.asList(input.split(","));
           List<POI> pois = poiService.readAll().stream().filter(p -> ids.contains(p.getId())).collect(Collectors.toList());
-          contributor.createItinerary("test", "test", pois, false, null, null);
-          itineraryService.readAll().forEach(i -> i.getPois().forEach(p -> System.out.println(p)));
+
+          System.out.println(itineraryService.create(new Itinerary(itineraryName, itineraryDescription, pois, false, null, null), contributor));
           console.readLine();
           break;
         case 6:
           System.out.println("Lista Itinerari: ");
           this.mongoItineraryRepository.findAllDeep().forEach(System.out::println);
+          console.readLine();
+          break;
+        case 7:
+          System.out.println("Creazione contributor");
+          String userName = console.readLine("Inserisci nome: ");
+          String userSurname = console.readLine("Inserisci cognome: ");
+          String userEmail = console.readLine("Inserisci email: ");
+          System.out.println(userService.create(new Contributor(userName, userSurname, userEmail), admin));
+          console.readLine();
+          break;
+        case 8:
+          System.out.println("Lista Utenti");
+          userService.readAll().forEach(System.out::println);
           console.readLine();
           break;
         case 10:
@@ -125,12 +148,14 @@ public class DiscoverMyCityApplication implements CommandLineRunner {
     return """
         ######## MENU ###########
         
-        1) crea punto interesse
+        1) crea punto interesse da approvare
         2) lista punti interesse da approvare
         3) lista punti interesse approvati
         4) approva punto interesse
         5) crea itinerario
         6) mostra itinerari
+        7) creazione contributor
+        8) lista utenti
         10) exit
         
         """;
