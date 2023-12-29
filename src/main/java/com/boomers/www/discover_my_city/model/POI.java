@@ -1,38 +1,33 @@
-package com.boomers.www.discover_my_city;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+package com.boomers.www.discover_my_city.model;
 
 public class POI {
-  private final String id;
+  private String id;
   private String name;
   private String description;
   private Coordinate coordinate;
   private Status status;
 
-  private static List<POI> pois = new ArrayList<>();
+  public POI() { }
 
-  public POI(String name, String description, Coordinate coordinate) {
-    this.id = UUID.randomUUID().toString();
+  public POI(String id, String name, String description, Coordinate coordinate, Status status) {
+    this.id = id;
     this.name = name;
     this.description = description;
     this.coordinate = coordinate;
-    this.status = Status.IN_APPROVAL;
+    this.status = status;
   }
 
-  public POI approve() {
-    this.status = Status.APPROVED;
-    return this;
+  public POI(String name, String description, Coordinate coordinate, Status status) {
+    this.name = name;
+    this.description = description;
+    this.coordinate = coordinate;
+    this.status = status;
   }
 
-  public POI save() {
-    pois.add(this);
-    return this;
-  }
-
-  public static List<POI> getPois() {
-    return POI.pois;
+  public POI(String name, String description, Coordinate coordinate) {
+    this.name = name;
+    this.description = description;
+    this.coordinate = coordinate;
   }
 
   public String getId() {
@@ -66,6 +61,8 @@ public class POI {
   public Status getStatus() {
     return this.status;
   }
+
+  public void setStatus(Status status) { this.status = status; }
 
   @Override
   public String toString() {
