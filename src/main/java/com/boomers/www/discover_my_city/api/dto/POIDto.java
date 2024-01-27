@@ -6,6 +6,8 @@ public class POIDto {
   private String description;
   private CoordinateDto coordinate;
   private String status;
+  private UserDto creator;
+  private UserDto approver;
 
   public void setId(Integer id) {
     this.id = id;
@@ -45,5 +47,21 @@ public class POIDto {
 
   public void setStatus(String status) {
     this.status = status;
+  }
+
+  public UserDto getCreator() {
+    return creator;
+  }
+
+  public void setCreator(UserDto creator) {
+    this.creator = creator;
+  }
+
+  public UserDto getApprover() {
+    return approver;
+  }
+
+  public void setApprover(UserDto approver) {
+    this.approver = approver;
   }
 }

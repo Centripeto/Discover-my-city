@@ -15,6 +15,14 @@ public class POIEntity {
   private Double longitude;
   private String status;
 
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "creator")
+  public UserEntity creator;
+
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "approver")
+  public UserEntity approver;
+
   public void setId(Integer id) {
     this.id = id;
   }
@@ -61,5 +69,21 @@ public class POIEntity {
 
   public void setStatus(String status) {
     this.status = status;
+  }
+
+  public UserEntity getCreator() {
+    return creator;
+  }
+
+  public void setCreator(UserEntity creator) {
+    this.creator = creator;
+  }
+
+  public UserEntity getApprover() {
+    return approver;
+  }
+
+  public void setApprover(UserEntity approver) {
+    this.approver = approver;
   }
 }

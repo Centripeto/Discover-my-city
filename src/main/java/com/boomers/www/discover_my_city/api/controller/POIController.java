@@ -26,8 +26,8 @@ public class POIController {
     this.poiToPoiDtoMapper = poiToPoiDtoMapper;
   }
 
-  @PostMapping("/create")
-  public ResponseEntity<POIDto> createPoi(
+  @PostMapping("")
+  public ResponseEntity<POIDto> create(
       @RequestBody POIDto poi, @RequestHeader(name = "Authorization") String token) {
     String jwt = token.substring(7);
     POIDto dto = null;

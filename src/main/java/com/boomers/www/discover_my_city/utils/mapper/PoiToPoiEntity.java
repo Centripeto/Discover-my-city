@@ -4,19 +4,35 @@ import com.boomers.www.discover_my_city.core.model.poi.POI;
 import com.boomers.www.discover_my_city.core.model.user.Coordinate;
 import com.boomers.www.discover_my_city.core.model.user.Status;
 import com.boomers.www.discover_my_city.tech.persistence.entity.POIEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 @Component
 public class PoiToPoiEntity implements Mapper<POI, POIEntity> {
+
+  private final UserToUserEntity userMapper;
+
+  @Autowired
+  public PoiToPoiEntity(UserToUserEntity userMapper) {
+    this.userMapper = userMapper;
+  }
+
   @Override
   public POI from(POIEntity model) {
-    POI poi = new POI();
-    poi.setId(model.getId());
-    poi.setDescription(model.getDescription());
-    poi.setCoordinate(new Coordinate(model.getLatitude(), model.getLongitude()));
-    poi.setStatus(Status.valueOf(model.getStatus()));
-    poi.setName(model.getName());
-    return poi;
+    POI.Builder builder =
+        POI.builder()
+            .addId(model.getId())
+            .addName(model.getName())
+            .addDescription(model.getDescription())
+            .addCoordinate(new Coordinate(model.getLatitude(), model.getLongitude()))
+            .addCreator(userMapper.from(model.getCreator()))
+            .addStatus(Status.valueOf(model.getStatus()));
+    if (!Objects.isNull(model.getApprover())) {
+      builder.addApprover(userMapper.from(model.getApprover()));
+    }
+    return builder.build();
   }
 
   @Override
@@ -28,6 +44,10 @@ public class PoiToPoiEntity implements Mapper<POI, POIEntity> {
     poi.setLongitude(model.getCoordinate().getLongitude());
     poi.setStatus(model.getStatus().toString());
     poi.setName(model.getName());
+    poi.setCreator(userMapper.to(model.getCreator()));
+    if (!Objects.isNull(model.getApprover())) {
+      poi.setApprover(userMapper.to(model.getApprover()));
+    }
     return poi;
   }
 }
