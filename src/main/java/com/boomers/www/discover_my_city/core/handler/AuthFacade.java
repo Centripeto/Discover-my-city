@@ -41,6 +41,8 @@ public class AuthFacade {
   }
 
   public AuthenticationResponse registerAdmin() {
+    authenticationService.createAuthContributor();
+    authenticationService.createAdmin();
     return authenticationService.createContributor();
   }
 

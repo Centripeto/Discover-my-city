@@ -87,7 +87,7 @@ public class AuthenticationService {
   public AuthenticationResponse createAdmin() {
     User user =
         userRepository.save(
-            User.createUser(
+            new User(
                 "admin",
                 "admin",
                 "admin",
@@ -103,13 +103,29 @@ public class AuthenticationService {
   public AuthenticationResponse createContributor() {
     User user =
         userRepository.save(
-            User.createUser(
+            new User(
                 "contributor",
                 "contributor",
                 "contributor",
                 "contributor@discover.it",
                 passwordEncoder.encode("contributor"),
                 Role.CONTRIBUTOR));
+    String jwtToken = jwtService.generateToken(user);
+    String refreshToken = jwtService.generateRefreshToken(user);
+    saveUserToken(user, jwtToken);
+    return new AuthenticationResponse(jwtToken, refreshToken);
+  }
+
+  public AuthenticationResponse createAuthContributor() {
+    User user =
+        userRepository.save(
+            new User(
+                "auth_contributor",
+                "auth_contributor",
+                "auth_contributor",
+                "auth_contributor@discover.it",
+                passwordEncoder.encode("auth_contributor"),
+                Role.AUTH_CONTRIBUTOR));
     String jwtToken = jwtService.generateToken(user);
     String refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(user, jwtToken);

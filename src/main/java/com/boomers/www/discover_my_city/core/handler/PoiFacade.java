@@ -3,6 +3,7 @@ package com.boomers.www.discover_my_city.core.handler;
 import com.boomers.www.discover_my_city.core.exception.UnauthorizedException;
 import com.boomers.www.discover_my_city.core.model.poi.POI;
 import com.boomers.www.discover_my_city.core.model.user.User;
+import com.boomers.www.discover_my_city.core.repository.POIRepository;
 import com.boomers.www.discover_my_city.core.service.poi.POIService;
 import com.boomers.www.discover_my_city.core.service.poi.behaviour.create.CreateApprovedPoiBehaviour;
 import com.boomers.www.discover_my_city.core.service.poi.behaviour.create.CreateInApprovalPoiBehaviour;
@@ -17,8 +18,8 @@ public class PoiFacade {
   private final POIService poiService;
 
   @Autowired
-  public PoiFacade(POIService poiService) {
-    this.poiService = poiService;
+  public PoiFacade(POIRepository poiRepository) {
+    this.poiService = new POIService(poiRepository);
   }
 
   public POI createPoi(User user, POI poi) throws UnauthorizedException {
