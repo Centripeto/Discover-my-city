@@ -1,7 +1,7 @@
 package com.boomers.www.discover_my_city.utils.mapper;
 
+import com.boomers.www.discover_my_city.core.model.poi.POI;
 import com.boomers.www.discover_my_city.core.model.user.Coordinate;
-import com.boomers.www.discover_my_city.core.model.user.POI;
 import com.boomers.www.discover_my_city.core.model.user.Status;
 import com.boomers.www.discover_my_city.tech.persistence.entity.POIEntity;
 import org.springframework.stereotype.Component;

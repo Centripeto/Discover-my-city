@@ -1,6 +1,6 @@
 package com.boomers.www.discover_my_city.core.model.user;
 
-public abstract class User {
+public class User {
 
   private String name;
 
@@ -68,14 +68,5 @@ public abstract class User {
 
   public Role getRole() {
     return role;
-  }
-
-  public static User createUser(String name, String username, String lastname, String email, String password, Role role) {
-    return switch (role) {
-      case ADMIN -> new Admin(name, username, lastname, email, password);
-      case CONTRIBUTOR -> new Contributor(name, username, lastname, email, password);
-      case AUTH_CONTRIBUTOR -> new AuthContributor(name, username, lastname, email, password);
-      case CURATORE -> null;
-    };
   }
 }

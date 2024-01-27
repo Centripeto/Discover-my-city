@@ -1,6 +1,6 @@
 package com.boomers.www.discover_my_city.tech.persistence.service;
 
-import com.boomers.www.discover_my_city.core.model.user.POI;
+import com.boomers.www.discover_my_city.core.model.poi.POI;
 import com.boomers.www.discover_my_city.core.repository.POIRepository;
 import com.boomers.www.discover_my_city.tech.persistence.entity.POIEntity;
 import com.boomers.www.discover_my_city.tech.persistence.repository.POIEntityRepository;

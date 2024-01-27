@@ -1,5 +1,7 @@
 package com.boomers.www.discover_my_city.core.model.user;
 
+import com.boomers.www.discover_my_city.core.model.poi.POI;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;

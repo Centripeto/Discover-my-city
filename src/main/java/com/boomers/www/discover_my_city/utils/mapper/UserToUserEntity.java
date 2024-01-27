@@ -16,7 +16,7 @@ public class UserToUserEntity implements Mapper<User, UserEntity> {
     String lastname = model.getLastname();
     String password = model.getPassword();
     Role role = Role.valueOf(model.getRole().toString());
-    return User.createUser(name, username, lastname, email, password, role);
+    return new User(name, username, lastname, email, password, role);
   }
 
   @Override
