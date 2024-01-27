@@ -9,8 +9,8 @@ import com.boomers.www.discover_my_city.core.repository.POIRepository;
 import com.boomers.www.discover_my_city.core.service.poi.POIService;
 import com.boomers.www.discover_my_city.core.service.poi.behaviour.create.CreateApprovedPoiBehaviour;
 import com.boomers.www.discover_my_city.core.service.poi.behaviour.create.CreateInApprovalPoiBehaviour;
+import com.boomers.www.discover_my_city.core.service.poi.behaviour.create.CreateNotAuthorizedPoiBehaviour;
 import com.boomers.www.discover_my_city.core.service.poi.behaviour.create.CreatePoiBehaviour;
-import com.boomers.www.discover_my_city.core.service.poi.behaviour.create.NotAuthorizedCreatePoiBehaviour;
 import com.boomers.www.discover_my_city.core.service.poi.behaviour.list.ListAllApprovedPoiAndUserInApproval;
 import com.boomers.www.discover_my_city.core.service.poi.behaviour.list.ListAllPoiBehaviour;
 import com.boomers.www.discover_my_city.core.service.poi.behaviour.list.ListPoiBehaviour;
@@ -39,7 +39,7 @@ public class PoiFacade {
     return switch (user.getRole()) {
       case CONTRIBUTOR -> new CreateInApprovalPoiBehaviour(user);
       case CURATORE, AUTH_CONTRIBUTOR -> new CreateApprovedPoiBehaviour(user);
-      case ADMIN -> new NotAuthorizedCreatePoiBehaviour();
+      case ADMIN -> new CreateNotAuthorizedPoiBehaviour();
     };
   }
 
