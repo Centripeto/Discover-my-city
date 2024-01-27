@@ -2,6 +2,7 @@ package com.boomers.www.discover_my_city.api.controller;
 
 import com.boomers.www.discover_my_city.api.dto.AuthenticationRequestDto;
 import com.boomers.www.discover_my_city.api.dto.AuthenticationResponseDto;
+import com.boomers.www.discover_my_city.api.dto.Response;
 import com.boomers.www.discover_my_city.core.exception.AuthenticationException;
 import com.boomers.www.discover_my_city.core.handler.AuthFacade;
 import com.boomers.www.discover_my_city.core.model.auth.AuthenticationRequest;
@@ -45,8 +46,9 @@ public class AuthController {
   }
 
   @PostMapping("/authenticate")
-  public ResponseEntity<AuthenticationResponseDto> authenticate(
+  public ResponseEntity<Response<AuthenticationResponseDto>> authenticate(
       @RequestBody AuthenticationRequestDto request) {
+
     AuthenticationRequest authenticationRequest =
         authenticationRequestDtoAuthenticationRequestMapper.to(request);
     AuthenticationResponseDto response = null;
@@ -56,10 +58,14 @@ public class AuthController {
               authFacade.authenticate(authenticationRequest));
 
     } catch (AuthenticationException ex) {
-      // TODO handle better error message
-      return ResponseEntity.status(403).body(null);
+      return ResponseEntity.status(403)
+          .body(Response.<AuthenticationResponseDto>builder().addMessage("Unauthorized").build());
     }
-    return ResponseEntity.ok(response);
+    return ResponseEntity.ok(
+        Response.<AuthenticationResponseDto>builder()
+            .addMessage("Authenticated")
+            .addResponse(response)
+            .build());
   }
 
   //  @PostMapping("/refresh-token")

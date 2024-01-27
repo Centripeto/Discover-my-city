@@ -13,13 +13,15 @@ public class POIEntity {
   private String description;
   private Double latitude;
   private Double longitude;
-  private String status;
 
-  @OneToOne(fetch = FetchType.EAGER)
+  @Enumerated(EnumType.STRING)
+  private POIStatus status;
+
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "creator")
   public UserEntity creator;
 
-  @OneToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "approver")
   public UserEntity approver;
 
@@ -63,11 +65,11 @@ public class POIEntity {
     this.description = description;
   }
 
-  public String getStatus() {
+  public POIStatus getStatus() {
     return this.status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(POIStatus status) {
     this.status = status;
   }
 
