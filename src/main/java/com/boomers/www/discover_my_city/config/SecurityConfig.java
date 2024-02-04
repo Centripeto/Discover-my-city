@@ -21,7 +21,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableMethodSecurity
 public class SecurityConfig {
 
-  private static final String[] WHITE_LIST_URL = {"/api/auth/**"};
+  private static final String[] WHITE_LIST_URL = {"/api/auth/**", "/api/public/**"};
   private final JwtAuthenticationFilter jwtAuthFilter;
   private final AuthenticationProvider authenticationProvider;
   private final LogoutHandler logoutHandler;
@@ -39,6 +39,8 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.csrf(AbstractHttpConfigurer::disable)
+        .cors()
+        .and()
         .authorizeHttpRequests(
             req ->
                 req.requestMatchers(WHITE_LIST_URL)
@@ -49,6 +51,8 @@ public class SecurityConfig {
                     .authenticated())
         .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
         .authenticationProvider(authenticationProvider)
+        .cors()
+        .and()
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
         .logout(
             logout ->
@@ -58,6 +62,7 @@ public class SecurityConfig {
                     .logoutSuccessHandler(
                         (request, response, authentication) ->
                             SecurityContextHolder.clearContext()));
+
     http.headers().frameOptions().disable();
     return http.build();
   }

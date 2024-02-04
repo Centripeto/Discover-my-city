@@ -21,6 +21,7 @@ public class UserToUserDto implements Mapper<User, UserDto> {
     user.setName(model.getName());
     user.setUsername(model.getUsername());
     user.setLastname(model.getLastname());
+    user.setRole(model.getRole().toString());
     return user;
   }
 }
