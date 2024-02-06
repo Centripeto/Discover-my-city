@@ -8,11 +8,13 @@ import com.boomers.www.discover_my_city.core.handler.AuthFacade;
 import com.boomers.www.discover_my_city.core.handler.PoiFacade;
 import com.boomers.www.discover_my_city.core.model.poi.POI;
 import com.boomers.www.discover_my_city.core.model.poi.POIRequest;
+import com.boomers.www.discover_my_city.core.model.user.User;
 import com.boomers.www.discover_my_city.utils.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -50,15 +52,18 @@ public class POIController {
 
   @GetMapping("/")
   public ResponseEntity<Response<Paged<POIDto>>> pois(
-      @RequestHeader(name = "Authorization") String token,
+      @RequestHeader(name = "Authorization", required = false) String token,
       @RequestParam Optional<Integer> pageNumber,
       @RequestParam Optional<Integer> pageSize) {
-    String jwt = token.substring(7);
+    User user = null;
     POIRequest request = new POIRequest();
     request.setPageNumber(pageNumber.orElse(0));
     request.setPageSize(pageSize.orElse(Integer.MAX_VALUE));
-    Paged<POI> pois =
-        poiFacade.findPois(authFacade.extractUserFromToken(jwt).orElse(null), request);
+    if (!Objects.isNull(token)) {
+      String jwt = token.substring(7);
+      user = authFacade.extractUserFromToken(jwt).orElse(null);
+    }
+    Paged<POI> pois = poiFacade.findPois(user, request);
     Paged<POIDto> response = new Paged<>();
     response.setList(
         pois.getList().stream().map(poiToPoiDtoMapper::to).collect(Collectors.toList()));
