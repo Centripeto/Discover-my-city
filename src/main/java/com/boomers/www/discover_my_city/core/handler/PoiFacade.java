@@ -1,6 +1,7 @@
 package com.boomers.www.discover_my_city.core.handler;
 
 import com.boomers.www.discover_my_city.api.dto.Paged;
+import com.boomers.www.discover_my_city.core.exception.NotFoundException;
 import com.boomers.www.discover_my_city.core.exception.UnauthorizedException;
 import com.boomers.www.discover_my_city.core.model.poi.POI;
 import com.boomers.www.discover_my_city.core.model.poi.POIRequest;
@@ -32,6 +33,14 @@ public class PoiFacade {
 
   public POI createPoi(User user, POI poi) throws UnauthorizedException {
     return poiService.createPOI(getCreatePoiStrategy(user), poi);
+  }
+
+  public POI approvePoi(User user, Integer id) throws UnauthorizedException, NotFoundException {
+    return poiService.approvePoi(user, id);
+  }
+
+  public POI rejectPoi(User user, Integer id) throws UnauthorizedException, NotFoundException {
+    return poiService.rejectPoi(user, id);
   }
 
   public Paged<POI> findPois(User user, POIRequest request) {

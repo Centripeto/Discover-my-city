@@ -10,4 +10,6 @@ public interface POIRepository {
   Paged<POI> getAllApprovedPoiAndUserInApproval(POIRequest request);
 
   Paged<POI> findAll(POIRequest request);
+
+  POI update(POI poi);
 }

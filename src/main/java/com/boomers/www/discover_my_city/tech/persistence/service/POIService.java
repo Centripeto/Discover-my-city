@@ -37,7 +37,8 @@ public class POIService implements POIRepository {
 
   @Override
   public POI save(POI poi) {
-    return poiToPoiEntityMapper.from(poiEntityRepository.save(attachCreatorAndApprover(poi)));
+    POIEntity entity = poiToPoiEntityMapper.to(poi);
+    return poiToPoiEntityMapper.from(poiEntityRepository.save(attachCreatorAndApprover(entity)));
   }
 
   @Override
@@ -63,7 +64,11 @@ public class POIService implements POIRepository {
     Pageable pagination = PageRequest.of(request.getPageNumber(), request.getPageSize());
     Specification<POIEntity> specification = isTrue();
     if (!Objects.isNull(request.getStatus())) {
-      specification = (hasStatus(POIStatus.valueOf(request.getStatus().toString())));
+      specification =
+          specification.and(hasStatus(POIStatus.valueOf(request.getStatus().toString())));
+    }
+    if (!Objects.isNull(request.getId())) {
+      specification = specification.and(hasId(request.getId()));
     }
     Page<POIEntity> page = poiEntityRepository.findAll(specification, pagination);
     // TODO gestire creazione
@@ -76,8 +81,18 @@ public class POIService implements POIRepository {
     return result;
   }
 
-  private POIEntity attachCreatorAndApprover(POI poi) {
-    POIEntity entity = poiToPoiEntityMapper.to(poi);
+  @Override
+  public POI update(POI poi) {
+    POIEntity entity = attachCreatorAndApprover(poiEntityRepository.getReferenceById(poi.getId()));
+    entity.setDescription(poi.getDescription());
+    entity.setStatus(POIStatus.valueOf(poi.getStatus().toString()));
+    entity.setLatitude(poi.getCoordinate().getLatitude());
+    entity.setLongitude(poi.getCoordinate().getLongitude());
+    entity.setName(poi.getName());
+    return poiToPoiEntityMapper.from(poiEntityRepository.save(entity));
+  }
+
+  private POIEntity attachCreatorAndApprover(POIEntity entity) {
     UserEntity creator =
         userRepository
             .findByUsernameOrEmail(
@@ -102,6 +117,10 @@ public class POIService implements POIRepository {
 
   static Specification<POIEntity> hasStatus(POIStatus status) {
     return (poi, cq, cb) -> cb.equal(poi.get("status"), status);
+  }
+
+  static Specification<POIEntity> hasId(Integer id) {
+    return (poi, cq, cb) -> cb.equal(poi.get("id"), id);
   }
 
   public static Specification<POIEntity> hasCreator(String username) {
