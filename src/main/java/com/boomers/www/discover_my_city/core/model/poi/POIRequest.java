@@ -31,4 +31,32 @@ public class POIRequest extends PaginatedRequest {
   public void setStatus(Status status) {
     this.status = status;
   }
+
+  public static Builder builder() {
+    return new POIRequest.Builder();
+  }
+
+  public static class Builder extends PaginatedRequest.Builder<POIRequest> {
+
+    public PaginatedRequest.Builder<POIRequest> addId(Integer id) {
+      this.request.setId(id);
+      return this;
+    }
+
+    public PaginatedRequest.Builder<POIRequest> addCreator(User creator) {
+      this.request.setCreator(creator);
+      return this;
+    }
+
+    public PaginatedRequest.Builder<POIRequest> addStatus(Status status) {
+      this.request.setStatus(status);
+      return this;
+    }
+
+    @Override
+    public PaginatedRequest.Builder<POIRequest> reset() {
+      this.request = new POIRequest();
+      return this;
+    }
+  }
 }
