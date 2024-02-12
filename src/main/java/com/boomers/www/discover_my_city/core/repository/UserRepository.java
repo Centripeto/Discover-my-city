@@ -10,4 +10,6 @@ public interface UserRepository {
   Optional<User> loadUserByUsername(String username);
 
   User save(User user);
+
+  Optional<User> findById(Integer userId);
 }
