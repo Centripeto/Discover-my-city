@@ -9,13 +9,26 @@ public class POIEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
+  @Column(nullable = false)
   private String name;
+
+  @Column(nullable = false)
   private String description;
+
+  @Column(nullable = false)
   private Double latitude;
+
+  @Column(nullable = false)
   private Double longitude;
 
   @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
   private POIStatus status;
+
+  // ss  @ManyToOne(fetch = FetchType.EAGER)
+  //  @JoinColumn(name = "municipality")
+  //  @Column(nullable = false)
+  //  public MunicipalityEntity municipality;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "creator")
@@ -88,4 +101,12 @@ public class POIEntity {
   public void setApprover(UserEntity approver) {
     this.approver = approver;
   }
+
+  //  public MunicipalityEntity getMunicipality() {
+  //    return municipality;
+  //  }
+  //
+  //  public void setMunicipality(MunicipalityEntity municipality) {
+  //    this.municipality = municipality;
+  //  }
 }

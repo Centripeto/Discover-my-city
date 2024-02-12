@@ -1,5 +1,6 @@
 package com.boomers.www.discover_my_city.service;
 
+import com.boomers.www.discover_my_city.core.model.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,30 +10,31 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserSecurity implements UserDetails {
-  private final List<SimpleGrantedAuthority> authorities;
-  private final String username;
-  private final String password;
+  private final User user;
 
-  public UserSecurity(String password, String username, List<String> authorities) {
-    this.password = password;
-    this.username = username;
-    this.authorities =
-        authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+  public UserSecurity(User user) {
+    this.user = user;
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return authorities;
+    return List.of(user.getRole().toString()).stream()
+        .map(SimpleGrantedAuthority::new)
+        .collect(Collectors.toList());
+  }
+
+  public User getUser() {
+    return user;
   }
 
   @Override
   public String getPassword() {
-    return password;
+    return user.getPassword();
   }
 
   @Override
   public String getUsername() {
-    return username;
+    return user.getUsername();
   }
 
   @Override

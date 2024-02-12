@@ -1,7 +1,5 @@
 package com.boomers.www.discover_my_city.core.model.poi;
 
-import com.boomers.www.discover_my_city.core.model.user.Coordinate;
-import com.boomers.www.discover_my_city.core.model.user.Status;
 import com.boomers.www.discover_my_city.core.model.user.User;
 
 public class POI {

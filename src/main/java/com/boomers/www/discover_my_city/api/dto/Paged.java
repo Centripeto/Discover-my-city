@@ -48,4 +48,50 @@ public class Paged<T> {
   public void setList(List<T> list) {
     this.list = list;
   }
+
+  public static <T> Paged.Builder<T> builder() {
+    return new Builder<T>();
+  }
+
+  public static class Builder<T> {
+    private Paged<T> paged;
+
+    public Builder() {
+      reset();
+    }
+
+    public Builder<T> reset() {
+      paged = new Paged<T>();
+      return this;
+    }
+
+    public Builder<T> addPagenumber(Integer pageNumber) {
+      paged.setPageNumber(pageNumber);
+      return this;
+    }
+
+    public Builder<T> addTotalSize(Long totalSize) {
+      paged.setTotalSize(totalSize);
+      return this;
+    }
+
+    public Builder<T> addPageSize(Integer pageSize) {
+      paged.setPageSize(pageSize);
+      return this;
+    }
+
+    public Builder<T> addTotalPages(Integer totalPages) {
+      paged.setTotalPages(totalPages);
+      return this;
+    }
+
+    public Builder<T> addList(List<T> list) {
+      paged.setList(list);
+      return this;
+    }
+
+    public Paged<T> build() {
+      return paged;
+    }
+  }
 }

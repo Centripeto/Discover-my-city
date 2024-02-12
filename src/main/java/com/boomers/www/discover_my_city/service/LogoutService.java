@@ -20,6 +20,7 @@ public class LogoutService implements LogoutHandler {
   @Override
   public void logout(
       HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    response.setHeader("Access-Control-Allow-Origin", "*");
     final String authHeader = request.getHeader("Authorization");
     final String jwt;
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -27,8 +28,6 @@ public class LogoutService implements LogoutHandler {
     }
     jwt = authHeader.substring(7);
     Boolean logout = authFacade.logout(jwt);
-    if (logout) {
-      SecurityContextHolder.clearContext();
-    }
+    SecurityContextHolder.clearContext();
   }
 }

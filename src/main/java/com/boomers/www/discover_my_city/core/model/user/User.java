@@ -1,5 +1,7 @@
 package com.boomers.www.discover_my_city.core.model.user;
 
+import com.boomers.www.discover_my_city.core.model.municipality.Municipality;
+
 public class User {
 
   private String name;
@@ -13,6 +15,8 @@ public class User {
   private String password;
 
   private Role role;
+
+  private Municipality municipality;
 
   public User() {}
 

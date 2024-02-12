@@ -4,6 +4,7 @@ public class UserDto {
   private String name;
   private String username;
   private String lastname;
+  private String role;
 
   public String getName() {
     return name;
@@ -27,5 +28,13 @@ public class UserDto {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public String getRole() {
+    return role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
   }
 }

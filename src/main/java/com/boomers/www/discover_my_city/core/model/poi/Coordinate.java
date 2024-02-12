@@ -1,4 +1,4 @@
-package com.boomers.www.discover_my_city.core.model.user;
+package com.boomers.www.discover_my_city.core.model.poi;
 
 public class Coordinate {
     private double latitude;

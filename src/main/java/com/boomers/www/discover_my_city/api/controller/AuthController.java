@@ -59,7 +59,10 @@ public class AuthController {
 
     } catch (AuthenticationException ex) {
       return ResponseEntity.status(403)
-          .body(Response.<AuthenticationResponseDto>builder().addMessage("Unauthorized").build());
+          .body(
+              Response.<AuthenticationResponseDto>builder()
+                  .addMessage("Authentication failed")
+                  .build());
     }
     return ResponseEntity.ok(
         Response.<AuthenticationResponseDto>builder()
