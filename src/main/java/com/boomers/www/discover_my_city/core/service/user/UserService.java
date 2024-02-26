@@ -33,7 +33,7 @@ public class UserService {
   }
 
   public User createUser(CreateUserBehaviour userBehaviour, User user)
-      throws UnauthorizedException {
+      throws UnauthorizedException, AlreadyExistsException, NotFoundException {
     validate(user);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     return userBehaviour.create(user, userRepository);
@@ -47,17 +47,23 @@ public class UserService {
     Municipality municipality =
         municipalityRepository
             .findById(municipalityId)
-            .orElseThrow(() -> new NotFoundException("User not found"));
+            .orElseThrow(() -> new NotFoundException("Municipality not found"));
 
-    Optional<UserMunicipality> userMunicipality = userMunicipalityRepository.findByUser(user);
+    Optional<Municipality> userMunicipality = userMunicipalityRepository.getUserMunicipality(user);
     if (userMunicipality.isPresent()) {
       throw new AlreadyExistsException();
     }
-
-    return connectUserBehaviour.connectUser(user, municipality, userMunicipalityRepository);
+    UserMunicipality toSave = new UserMunicipality();
+    toSave.setUser(user);
+    toSave.setMunicipality(municipality);
+    return connectUserBehaviour.connectUser(toSave, userMunicipalityRepository);
   }
 
   private void validate(User user) {
     // TODO validation
+  }
+
+  public Optional<Municipality> getUserMunicipality(User user) {
+    return userMunicipalityRepository.getUserMunicipality(user);
   }
 }

@@ -2,6 +2,8 @@ package com.boomers.www.discover_my_city.api.controller;
 
 import com.boomers.www.discover_my_city.api.dto.Response;
 import com.boomers.www.discover_my_city.api.dto.UserDto;
+import com.boomers.www.discover_my_city.core.exception.AlreadyExistsException;
+import com.boomers.www.discover_my_city.core.exception.NotFoundException;
 import com.boomers.www.discover_my_city.core.exception.UnauthorizedException;
 import com.boomers.www.discover_my_city.core.handler.AuthFacade;
 import com.boomers.www.discover_my_city.core.handler.UserFacade;
@@ -60,6 +62,12 @@ public class UserController {
               Response.<UserDto>builder()
                   .addMessage("You are not authorized to create user")
                   .build());
+    } catch (AlreadyExistsException e) {
+      return ResponseEntity.status(409)
+          .body(Response.<UserDto>builder().addMessage(e.getMessage()).build());
+    } catch (NotFoundException e) {
+      return ResponseEntity.status(404)
+          .body(Response.<UserDto>builder().addMessage(e.getMessage()).build());
     }
     return ResponseEntity.ok(
         Response.<UserDto>builder()

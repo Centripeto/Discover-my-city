@@ -29,7 +29,7 @@ public class UserFacade {
       userService = new UserService(userRepository, municipalityRepository, userMunicipalityRepository, passwordEncoder);
   }
 
-  public User createUser(User creator, User toCreate) throws UnauthorizedException {
+  public User createUser(User creator, User toCreate) throws UnauthorizedException, AlreadyExistsException, NotFoundException {
       return userService.createUser(createUserBehaviour(creator), toCreate);
   }
 
@@ -39,7 +39,7 @@ public class UserFacade {
 
     private CreateUserBehaviour createUserBehaviour(User user) {
         return switch(user.getRole()) {
-            case CURATORE -> new CreateContributorUserBehaviour();
+            case CURATORE -> new CreateContributorUserBehaviour(userService, user);
             case  ADMIN ->  new CreateAllKindsOfUserBehaviour();
             default -> new CreateNotAuthorizedUserBehaviour();
         };

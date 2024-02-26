@@ -40,12 +40,6 @@ public class AuthFacade {
     return this.authenticationService.authenticate(request);
   }
 
-  public AuthenticationResponse registerAdmin() {
-    authenticationService.createAuthContributor();
-    authenticationService.createAdmin();
-    return authenticationService.createContributor();
-  }
-
   public Optional<User> loadUserByUsername(String username) {
     return authenticationService.loadUserByUsername(username);
   }

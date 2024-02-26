@@ -7,7 +7,7 @@ import com.boomers.www.discover_my_city.core.model.user.User;
 import java.util.Optional;
 
 public interface UserMunicipalityRepository {
-  UserMunicipality save(User user, Municipality municipality);
+  UserMunicipality save(UserMunicipality userMunicipality);
 
-  Optional<UserMunicipality> findByUser(User user);
+  Optional<Municipality> getUserMunicipality(User user);
 }
