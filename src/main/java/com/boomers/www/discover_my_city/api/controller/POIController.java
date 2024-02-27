@@ -40,7 +40,7 @@ public class POIController {
   }
 
   @PostMapping("/")
-  public ResponseEntity<POIDto> create(@RequestBody POIDto poi, Principal principal) {
+  public ResponseEntity<Response<POIDto>> create(@RequestBody POIDto poi, Principal principal) {
     UserSecurity security =
         (UserSecurity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
     POIDto dto = null;
@@ -49,9 +49,10 @@ public class POIController {
           poiToPoiDtoMapper.to(
               poiFacade.createPoi(security.getUser(), poiToPoiDtoMapper.from(poi)));
     } catch (UnauthorizedException e) {
-      return ResponseEntity.status(401).body(null);
+      return ResponseEntity.status(401)
+          .body(Response.<POIDto>builder().addMessage(e.getMessage()).build());
     }
-    return ResponseEntity.ok(dto);
+    return ResponseEntity.ok(Response.<POIDto>builder().addMessage("").addResponse(dto).build());
   }
 
   @GetMapping("/")

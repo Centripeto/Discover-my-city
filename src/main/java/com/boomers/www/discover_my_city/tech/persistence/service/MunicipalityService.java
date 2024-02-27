@@ -17,6 +17,7 @@ import com.boomers.www.discover_my_city.tech.persistence.repository.UserEntityRe
 import com.boomers.www.discover_my_city.tech.persistence.repository.UserMunicipalityEntityRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -80,6 +81,7 @@ public class MunicipalityService implements MunicipalityRepository, UserMunicipa
     municipality.setArea(
         new AreaPathImpl(
             edges.stream()
+                .sorted(Comparator.comparingInt(EdgeEntity::getOrder))
                 .map(
                     el -> {
                       Coordinate coordinate = new Coordinate();
