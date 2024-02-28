@@ -3,6 +3,7 @@ package com.boomers.www.discover_my_city.core.handler;
 import com.boomers.www.discover_my_city.core.exception.AlreadyExistsException;
 import com.boomers.www.discover_my_city.core.exception.NotFoundException;
 import com.boomers.www.discover_my_city.core.exception.UnauthorizedException;
+import com.boomers.www.discover_my_city.core.model.municipality.Municipality;
 import com.boomers.www.discover_my_city.core.model.municipality.UserMunicipality;
 import com.boomers.www.discover_my_city.core.model.user.User;
 import com.boomers.www.discover_my_city.core.repository.MunicipalityRepository;
@@ -20,6 +21,8 @@ import com.boomers.www.discover_my_city.core.service.user.behaviour.create.Creat
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class UserFacade {
   private final UserService userService;
@@ -27,6 +30,10 @@ public class UserFacade {
   @Autowired
   public UserFacade (UserRepository userRepository, MunicipalityRepository municipalityRepository, UserMunicipalityRepository userMunicipalityRepository, PasswordEncoder passwordEncoder){
       userService = new UserService(userRepository, municipalityRepository, userMunicipalityRepository, passwordEncoder);
+  }
+
+  public Optional<Municipality> getUserMunicipality(User user) {
+      return userService.getUserMunicipality(user);
   }
 
   public User createUser(User creator, User toCreate) throws UnauthorizedException, AlreadyExistsException, NotFoundException {

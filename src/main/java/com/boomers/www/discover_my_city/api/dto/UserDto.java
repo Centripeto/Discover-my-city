@@ -5,6 +5,7 @@ public class UserDto {
   private String username;
   private String lastname;
   private String role;
+  private MunicipalityDto municipalityDto;
 
   public String getName() {
     return name;
@@ -36,5 +37,13 @@ public class UserDto {
 
   public void setRole(String role) {
     this.role = role;
+  }
+
+  public MunicipalityDto getMunicipalityDto() {
+    return municipalityDto;
+  }
+
+  public void setMunicipalityDto(MunicipalityDto municipalityDto) {
+    this.municipalityDto = municipalityDto;
   }
 }

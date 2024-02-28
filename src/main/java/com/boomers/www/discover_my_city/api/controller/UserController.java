@@ -7,6 +7,7 @@ import com.boomers.www.discover_my_city.core.exception.NotFoundException;
 import com.boomers.www.discover_my_city.core.exception.UnauthorizedException;
 import com.boomers.www.discover_my_city.core.handler.AuthFacade;
 import com.boomers.www.discover_my_city.core.handler.UserFacade;
+import com.boomers.www.discover_my_city.core.model.municipality.Municipality;
 import com.boomers.www.discover_my_city.core.model.user.User;
 import com.boomers.www.discover_my_city.service.UserSecurity;
 import com.boomers.www.discover_my_city.utils.mapper.Mapper;
@@ -42,6 +43,8 @@ public class UserController {
       return ResponseEntity.status(404)
           .body(Response.<UserDto>builder().addMessage("User not found").build());
     }
+    Municipality municipality = userFacade.getUserMunicipality(security.getUser()).orElse(null);
+    security.getUser().setMunicipality(municipality);
     return ResponseEntity.ok(
         Response.<UserDto>builder()
             .addMessage("")

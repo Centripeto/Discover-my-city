@@ -44,6 +44,7 @@ public class PoiFacade {
     if (!userMunicipality.getArea().isInBounds(poi.getCoordinate())) {
      throw new UnauthorizedException("POI creato al di fuori del proprio comune");
     }
+    poi.setMunicipality(userMunicipality);
     return poiService.createPOI(getCreatePoiStrategy(user), poi);
   }
 

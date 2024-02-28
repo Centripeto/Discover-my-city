@@ -14,7 +14,7 @@ insert into user_municipality(municipality_id, user_id) values (1, 2);
 insert into user_municipality(municipality_id, user_id) values (1, 3);
 insert into user_municipality(municipality_id, user_id) values (1, 4);
 
-insert into pois(approver, creator, latitude, longitude, description, name, status) values(null, 2, 43.30032173018055, 13.453416367615311, 'Piazza principale di macerata', 'Piazza Macerata', 'IN_APPROVAL');
-insert into pois(approver, creator, latitude, longitude, description, name, status) values(null, 2, 43.307130023732846, 13.456182455701931, 'Sferisterio', 'Sferisterio', 'IN_APPROVAL');
-insert into pois(approver, creator, latitude, longitude, description, name, status) values(null, 2, 43.307130023732846, 13.435784152495666, 'Stadio di Macerata', 'Stadio di Macerata', 'IN_APPROVAL');
-insert into pois(approver, creator, latitude, longitude, description, name, status) values(null, 2, 43.299759543424706, 13.446813800445032, 'Giardini di Macerata', 'Giardini Diaz', 'IN_APPROVAL');
+insert into pois(municipality_id, approver, creator, latitude, longitude, description, name, status) values(1, null, 2, 43.30032173018055, 13.453416367615311, 'Piazza principale di macerata', 'Piazza Macerata', 'IN_APPROVAL');
+insert into pois(municipality_id, approver, creator, latitude, longitude, description, name, status) values(1, null, 2, 43.307130023732846, 13.456182455701931, 'Sferisterio', 'Sferisterio', 'IN_APPROVAL');
+insert into pois(municipality_id, approver, creator, latitude, longitude, description, name, status) values(1, null, 2, 43.307130023732846, 13.435784152495666, 'Stadio di Macerata', 'Stadio di Macerata', 'IN_APPROVAL');
+insert into pois(municipality_id, approver, creator, latitude, longitude, description, name, status) values(1, null, 2, 43.299759543424706, 13.446813800445032, 'Giardini di Macerata', 'Giardini Diaz', 'IN_APPROVAL');

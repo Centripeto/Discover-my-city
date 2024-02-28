@@ -1,6 +1,7 @@
 package com.boomers.www.discover_my_city.config;
 
 import com.boomers.www.discover_my_city.core.handler.AuthFacade;
+import com.boomers.www.discover_my_city.core.handler.UserFacade;
 import com.boomers.www.discover_my_city.core.model.user.User;
 import com.boomers.www.discover_my_city.service.UserSecurity;
 import jakarta.servlet.FilterChain;
@@ -21,10 +22,12 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final AuthFacade authFacade;
+  private final UserFacade userFacade;
 
   @Autowired
-  public JwtAuthenticationFilter(AuthFacade authFacade) {
+  public JwtAuthenticationFilter(AuthFacade authFacade, UserFacade userFacade) {
     this.authFacade = authFacade;
+    this.userFacade = userFacade;
   }
 
   @Override

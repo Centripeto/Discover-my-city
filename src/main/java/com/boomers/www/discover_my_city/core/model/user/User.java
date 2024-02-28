@@ -1,5 +1,7 @@
 package com.boomers.www.discover_my_city.core.model.user;
 
+import com.boomers.www.discover_my_city.core.model.municipality.Municipality;
+
 public class User {
 
   private Integer id;
@@ -15,6 +17,8 @@ public class User {
   private String password;
 
   private Role role;
+
+  private Municipality municipality;
 
   public User() {}
 
@@ -89,5 +93,13 @@ public class User {
 
   public Role getRole() {
     return role;
+  }
+
+  public Municipality getMunicipality() {
+    return municipality;
+  }
+
+  public void setMunicipality(Municipality municipality) {
+    this.municipality = municipality;
   }
 }

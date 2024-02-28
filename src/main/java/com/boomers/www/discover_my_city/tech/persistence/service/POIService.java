@@ -4,9 +4,11 @@ import com.boomers.www.discover_my_city.api.dto.Paged;
 import com.boomers.www.discover_my_city.core.model.poi.POI;
 import com.boomers.www.discover_my_city.core.model.poi.POIRequest;
 import com.boomers.www.discover_my_city.core.repository.POIRepository;
+import com.boomers.www.discover_my_city.tech.persistence.entity.MunicipalityEntity;
 import com.boomers.www.discover_my_city.tech.persistence.entity.POIEntity;
 import com.boomers.www.discover_my_city.tech.persistence.entity.POIStatus;
 import com.boomers.www.discover_my_city.tech.persistence.entity.UserEntity;
+import com.boomers.www.discover_my_city.tech.persistence.repository.MunicipalityEntityRepository;
 import com.boomers.www.discover_my_city.tech.persistence.repository.POIEntityRepository;
 import com.boomers.www.discover_my_city.tech.persistence.repository.UserEntityRepository;
 import com.boomers.www.discover_my_city.utils.mapper.Mapper;
@@ -23,14 +25,17 @@ import java.util.stream.Collectors;
 @Service
 public class POIService implements POIRepository {
   private final POIEntityRepository poiEntityRepository;
+  private final MunicipalityEntityRepository municipalityEntityRepository;
   private final UserEntityRepository userRepository;
   private final Mapper<POI, POIEntity> poiToPoiEntityMapper;
 
   public POIService(
       POIEntityRepository poiEntityRepository,
+      MunicipalityEntityRepository municipalityEntityRepository,
       UserEntityRepository userRepository,
       Mapper<POI, POIEntity> poiToPoiEntityMapper) {
     this.poiEntityRepository = poiEntityRepository;
+    this.municipalityEntityRepository = municipalityEntityRepository;
     this.userRepository = userRepository;
     this.poiToPoiEntityMapper = poiToPoiEntityMapper;
   }
@@ -38,7 +43,8 @@ public class POIService implements POIRepository {
   @Override
   public POI save(POI poi) {
     POIEntity entity = poiToPoiEntityMapper.to(poi);
-    return poiToPoiEntityMapper.from(poiEntityRepository.save(attachCreatorAndApprover(entity)));
+    return poiToPoiEntityMapper.from(
+        poiEntityRepository.save(attachMunicipality(attachCreatorAndApprover(entity))));
   }
 
   @Override
@@ -108,6 +114,13 @@ public class POIService implements POIRepository {
     }
     entity.setCreator(creator);
     entity.setApprover(approver);
+    return entity;
+  }
+
+  private POIEntity attachMunicipality(POIEntity entity) {
+    MunicipalityEntity municipality =
+        municipalityEntityRepository.findById(entity.getMunicipality().getId()).orElse(null);
+    entity.setMunicipality(municipality);
     return entity;
   }
 
