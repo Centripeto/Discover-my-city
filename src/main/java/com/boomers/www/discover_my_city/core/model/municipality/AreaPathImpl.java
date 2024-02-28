@@ -8,7 +8,7 @@ import java.util.List;
 
 public class AreaPathImpl implements Area {
 
-  List<Coordinate> coordinates;
+  private List<Coordinate> coordinates;
 
   public AreaPathImpl(List<Coordinate> coordinates) {
     this.coordinates = coordinates;
@@ -36,7 +36,6 @@ public class AreaPathImpl implements Area {
       } else {
         path.lineTo(
             mercator.xAxisProjection(c.getLongitude()), mercator.yAxisProjection(c.getLatitude()));
-
       }
     }
     path.closePath();

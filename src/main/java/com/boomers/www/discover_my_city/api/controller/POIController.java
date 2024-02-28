@@ -5,7 +5,6 @@ import com.boomers.www.discover_my_city.api.dto.Paged;
 import com.boomers.www.discover_my_city.api.dto.Response;
 import com.boomers.www.discover_my_city.core.exception.NotFoundException;
 import com.boomers.www.discover_my_city.core.exception.UnauthorizedException;
-import com.boomers.www.discover_my_city.core.handler.AuthFacade;
 import com.boomers.www.discover_my_city.core.handler.PoiFacade;
 import com.boomers.www.discover_my_city.core.model.poi.POI;
 import com.boomers.www.discover_my_city.core.model.poi.POIRequest;
@@ -28,14 +27,11 @@ import java.util.stream.Collectors;
 public class POIController {
 
   private final PoiFacade poiFacade;
-  private final AuthFacade authFacade;
   private final Mapper<POI, POIDto> poiToPoiDtoMapper;
 
   @Autowired
-  public POIController(
-      PoiFacade poiFacade, Mapper<POI, POIDto> poiToPoiDtoMapper, AuthFacade authFacade) {
+  public POIController(PoiFacade poiFacade, Mapper<POI, POIDto> poiToPoiDtoMapper) {
     this.poiFacade = poiFacade;
-    this.authFacade = authFacade;
     this.poiToPoiDtoMapper = poiToPoiDtoMapper;
   }
 

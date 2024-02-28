@@ -5,7 +5,6 @@ import com.boomers.www.discover_my_city.api.dto.UserDto;
 import com.boomers.www.discover_my_city.core.exception.AlreadyExistsException;
 import com.boomers.www.discover_my_city.core.exception.NotFoundException;
 import com.boomers.www.discover_my_city.core.exception.UnauthorizedException;
-import com.boomers.www.discover_my_city.core.handler.AuthFacade;
 import com.boomers.www.discover_my_city.core.handler.UserFacade;
 import com.boomers.www.discover_my_city.core.model.municipality.Municipality;
 import com.boomers.www.discover_my_city.core.model.user.User;
@@ -23,14 +22,11 @@ import java.util.Objects;
 @RequestMapping("/api/user")
 public class UserController {
 
-  private final AuthFacade authFacade;
   private final UserFacade userFacade;
   private final Mapper<User, UserDto> userMapper;
 
   @Autowired
-  public UserController(
-      AuthFacade authFacade, UserFacade userFacade, Mapper<User, UserDto> userMapper) {
-    this.authFacade = authFacade;
+  public UserController(UserFacade userFacade, Mapper<User, UserDto> userMapper) {
     this.userFacade = userFacade;
     this.userMapper = userMapper;
   }
