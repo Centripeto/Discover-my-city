@@ -3,7 +3,7 @@ insert into users(role, email, lastname, name, password, username) values ('CONT
 insert into users(role, email, lastname, name, password, username) values ('AUTH_CONTRIBUTOR', 'auth_contributor@discover.it', 'auth_contributor', 'auth_contributor', '$2a$10$GxUtzAjn/JetF0qpEe3dnOsqzvUnXCHzJ.1qV8S2qyyaAp6jE2HLa', 'auth_contributor');
 insert into users(role, email, lastname, name, password, username) values ('CURATORE', 'curatore@discover.it', 'curatore', 'curatore', '$2a$10$GxUtzAjn/JetF0qpEe3dnOsqzvUnXCHzJ.1qV8S2qyyaAp6jE2HLa', 'curatore');
 
-insert into municipalities(id, description, name) values (1, 'Comune di macerata', 'Macerata');
+insert into municipalities(description, name) values ('Comune di macerata', 'Macerata');
 
 insert into edges(latitude, longitude, municipality_id, position) values (43.3145, 13.44933, 1, 0);
 insert into edges(latitude, longitude, municipality_id, position) values (43.29414,	13.39646, 1, 1);
