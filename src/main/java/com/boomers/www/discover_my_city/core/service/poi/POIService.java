@@ -47,6 +47,7 @@ public class POIService {
     request.setId(id);
     POI poi = findPoi(request);
     poi.setStatus(Status.APPROVED);
+    poi.setApprover(user);
     return poiRepository.update(poi);
   }
 

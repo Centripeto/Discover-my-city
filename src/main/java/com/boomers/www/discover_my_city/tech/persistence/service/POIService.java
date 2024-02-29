@@ -3,6 +3,7 @@ package com.boomers.www.discover_my_city.tech.persistence.service;
 import com.boomers.www.discover_my_city.api.dto.Paged;
 import com.boomers.www.discover_my_city.core.model.poi.POI;
 import com.boomers.www.discover_my_city.core.model.poi.POIRequest;
+import com.boomers.www.discover_my_city.core.model.user.User;
 import com.boomers.www.discover_my_city.core.repository.POIRepository;
 import com.boomers.www.discover_my_city.tech.persistence.entity.MunicipalityEntity;
 import com.boomers.www.discover_my_city.tech.persistence.entity.POIEntity;
@@ -28,16 +29,18 @@ public class POIService implements POIRepository {
   private final MunicipalityEntityRepository municipalityEntityRepository;
   private final UserEntityRepository userRepository;
   private final Mapper<POI, POIEntity> poiToPoiEntityMapper;
+  private final Mapper<User, UserEntity> userEntityMapper;
 
   public POIService(
-      POIEntityRepository poiEntityRepository,
-      MunicipalityEntityRepository municipalityEntityRepository,
-      UserEntityRepository userRepository,
-      Mapper<POI, POIEntity> poiToPoiEntityMapper) {
+          POIEntityRepository poiEntityRepository,
+          MunicipalityEntityRepository municipalityEntityRepository,
+          UserEntityRepository userRepository,
+          Mapper<POI, POIEntity> poiToPoiEntityMapper, Mapper<User, UserEntity> userEntityMapper) {
     this.poiEntityRepository = poiEntityRepository;
     this.municipalityEntityRepository = municipalityEntityRepository;
     this.userRepository = userRepository;
     this.poiToPoiEntityMapper = poiToPoiEntityMapper;
+      this.userEntityMapper = userEntityMapper;
   }
 
   @Override
@@ -94,12 +97,14 @@ public class POIService implements POIRepository {
 
   @Override
   public POI update(POI poi) {
-    POIEntity entity = attachCreatorAndApprover(poiEntityRepository.getReferenceById(poi.getId()));
+    POIEntity entity = poiEntityRepository.getReferenceById(poi.getId());
+    entity.setApprover(userEntityMapper.to(poi.getApprover()));
     entity.setDescription(poi.getDescription());
     entity.setStatus(POIStatus.valueOf(poi.getStatus().toString()));
     entity.setLatitude(poi.getCoordinate().getLatitude());
     entity.setLongitude(poi.getCoordinate().getLongitude());
     entity.setName(poi.getName());
+    attachCreatorAndApprover(entity);
     return poiToPoiEntityMapper.from(poiEntityRepository.save(entity));
   }
 
