@@ -54,7 +54,9 @@ public class POIService implements POIRepository {
         hasStatus(POIStatus.APPROVED)
             .or(
                 hasCreator(request.getCreator().getUsername())
-                    .and(hasStatus(POIStatus.IN_APPROVAL)));
+                    .and(
+                        hasStatus(POIStatus.IN_APPROVAL)
+                            .and(hasMunicipality(request.getMunicipality().getId()))));
     Page<POIEntity> page = poiEntityRepository.findAll(specification, pagination);
     Paged<POI> result = new Paged<>();
     result.setTotalSize(page.getTotalElements());
@@ -75,6 +77,9 @@ public class POIService implements POIRepository {
     }
     if (!Objects.isNull(request.getId())) {
       specification = specification.and(hasId(request.getId()));
+    }
+    if (!Objects.isNull(request.getMunicipality())) {
+      specification = specification.and(hasMunicipality(request.getMunicipality().getId()));
     }
     Page<POIEntity> page = poiEntityRepository.findAll(specification, pagination);
     // TODO gestire creazione
@@ -130,6 +135,13 @@ public class POIService implements POIRepository {
 
   static Specification<POIEntity> hasStatus(POIStatus status) {
     return (poi, cq, cb) -> cb.equal(poi.get("status"), status);
+  }
+
+  static Specification<POIEntity> hasMunicipality(Integer id) {
+    return (root, query, criteriaBuilder) -> {
+      Join<POIEntity, MunicipalityEntity> join = root.join("municipality");
+      return criteriaBuilder.equal(join.get("id"), id);
+    };
   }
 
   static Specification<POIEntity> hasId(Integer id) {

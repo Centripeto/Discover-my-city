@@ -72,9 +72,15 @@ public class PoiFacade {
     if (Objects.isNull(user)) {
       return new ListOnlyApprovedPoiBehaviour();
     }
+    Municipality municipality = userService.getUserMunicipality(user).orElse(null);
+    if (Objects.isNull(municipality)) {
+      return new ListOnlyApprovedPoiBehaviour();
+    }
+    user.setMunicipality(municipality);
     return switch(user.getRole()) {
       case CONTRIBUTOR, AUTH_CONTRIBUTOR -> new ListAllApprovedPoiAndUserInApproval(user);
-      case CURATORE, ADMIN ->  new ListAllPoiBehaviour();
+      case CURATORE ->  new ListAllPoiBehaviour(user);
+      default -> new ListOnlyApprovedPoiBehaviour();
     };
   }
 }
