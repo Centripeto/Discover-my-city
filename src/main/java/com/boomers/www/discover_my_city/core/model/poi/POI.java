@@ -1,5 +1,6 @@
 package com.boomers.www.discover_my_city.core.model.poi;
 
+import com.boomers.www.discover_my_city.core.model.municipality.Municipality;
 import com.boomers.www.discover_my_city.core.model.user.User;
 
 public class POI {
@@ -10,6 +11,7 @@ public class POI {
     private Status status;
     private User creator;
     private User approver;
+    private Municipality municipality;
 
     public void setId(Integer id) { this.id = id; }
     public Integer getId() {
@@ -60,6 +62,14 @@ public class POI {
 
     public void setApprover(User approver) {
         this.approver = approver;
+    }
+
+    public Municipality getMunicipality() {
+        return municipality;
+    }
+
+    public void setMunicipality(Municipality municipality) {
+        this.municipality = municipality;
     }
 
     @Override
@@ -123,6 +133,11 @@ public class POI {
 
         public Builder addApprover(User approver) {
             poi.setApprover(approver);
+            return this;
+        }
+
+        public Builder addMunicipality(Municipality municipality) {
+            poi.setMunicipality(municipality);
             return this;
         }
 

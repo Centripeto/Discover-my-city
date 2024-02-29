@@ -25,10 +25,9 @@ public class POIEntity {
   @Column(nullable = false)
   private POIStatus status;
 
-  // ss  @ManyToOne(fetch = FetchType.EAGER)
-  //  @JoinColumn(name = "municipality")
-  //  @Column(nullable = false)
-  //  public MunicipalityEntity municipality;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "municipality_id", nullable = false)
+  private MunicipalityEntity municipality;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "creator")
@@ -102,11 +101,11 @@ public class POIEntity {
     this.approver = approver;
   }
 
-  //  public MunicipalityEntity getMunicipality() {
-  //    return municipality;
-  //  }
-  //
-  //  public void setMunicipality(MunicipalityEntity municipality) {
-  //    this.municipality = municipality;
-  //  }
+  public MunicipalityEntity getMunicipality() {
+    return municipality;
+  }
+
+  public void setMunicipality(MunicipalityEntity municipality) {
+    this.municipality = municipality;
+  }
 }

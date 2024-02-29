@@ -39,12 +39,6 @@ public class AuthController {
         authenticationResponseDtoAuthenticationResponseMapper;
   }
 
-  @PostMapping("/register")
-  public ResponseEntity<AuthenticationResponseDto> register() {
-    return ResponseEntity.ok(
-        authenticationResponseDtoAuthenticationResponseMapper.from(authFacade.registerAdmin()));
-  }
-
   @PostMapping("/authenticate")
   public ResponseEntity<Response<AuthenticationResponseDto>> authenticate(
       @RequestBody AuthenticationRequestDto request) {

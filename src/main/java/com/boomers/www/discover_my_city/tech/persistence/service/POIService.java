@@ -4,9 +4,11 @@ import com.boomers.www.discover_my_city.api.dto.Paged;
 import com.boomers.www.discover_my_city.core.model.poi.POI;
 import com.boomers.www.discover_my_city.core.model.poi.POIRequest;
 import com.boomers.www.discover_my_city.core.repository.POIRepository;
+import com.boomers.www.discover_my_city.tech.persistence.entity.MunicipalityEntity;
 import com.boomers.www.discover_my_city.tech.persistence.entity.POIEntity;
 import com.boomers.www.discover_my_city.tech.persistence.entity.POIStatus;
 import com.boomers.www.discover_my_city.tech.persistence.entity.UserEntity;
+import com.boomers.www.discover_my_city.tech.persistence.repository.MunicipalityEntityRepository;
 import com.boomers.www.discover_my_city.tech.persistence.repository.POIEntityRepository;
 import com.boomers.www.discover_my_city.tech.persistence.repository.UserEntityRepository;
 import com.boomers.www.discover_my_city.utils.mapper.Mapper;
@@ -23,14 +25,17 @@ import java.util.stream.Collectors;
 @Service
 public class POIService implements POIRepository {
   private final POIEntityRepository poiEntityRepository;
+  private final MunicipalityEntityRepository municipalityEntityRepository;
   private final UserEntityRepository userRepository;
   private final Mapper<POI, POIEntity> poiToPoiEntityMapper;
 
   public POIService(
       POIEntityRepository poiEntityRepository,
+      MunicipalityEntityRepository municipalityEntityRepository,
       UserEntityRepository userRepository,
       Mapper<POI, POIEntity> poiToPoiEntityMapper) {
     this.poiEntityRepository = poiEntityRepository;
+    this.municipalityEntityRepository = municipalityEntityRepository;
     this.userRepository = userRepository;
     this.poiToPoiEntityMapper = poiToPoiEntityMapper;
   }
@@ -38,7 +43,8 @@ public class POIService implements POIRepository {
   @Override
   public POI save(POI poi) {
     POIEntity entity = poiToPoiEntityMapper.to(poi);
-    return poiToPoiEntityMapper.from(poiEntityRepository.save(attachCreatorAndApprover(entity)));
+    return poiToPoiEntityMapper.from(
+        poiEntityRepository.save(attachMunicipality(attachCreatorAndApprover(entity))));
   }
 
   @Override
@@ -48,7 +54,9 @@ public class POIService implements POIRepository {
         hasStatus(POIStatus.APPROVED)
             .or(
                 hasCreator(request.getCreator().getUsername())
-                    .and(hasStatus(POIStatus.IN_APPROVAL)));
+                    .and(
+                        hasStatus(POIStatus.IN_APPROVAL)
+                            .and(hasMunicipality(request.getMunicipality().getId()))));
     Page<POIEntity> page = poiEntityRepository.findAll(specification, pagination);
     Paged<POI> result = new Paged<>();
     result.setTotalSize(page.getTotalElements());
@@ -69,6 +77,9 @@ public class POIService implements POIRepository {
     }
     if (!Objects.isNull(request.getId())) {
       specification = specification.and(hasId(request.getId()));
+    }
+    if (!Objects.isNull(request.getMunicipality())) {
+      specification = specification.and(hasMunicipality(request.getMunicipality().getId()));
     }
     Page<POIEntity> page = poiEntityRepository.findAll(specification, pagination);
     // TODO gestire creazione
@@ -111,12 +122,26 @@ public class POIService implements POIRepository {
     return entity;
   }
 
+  private POIEntity attachMunicipality(POIEntity entity) {
+    MunicipalityEntity municipality =
+        municipalityEntityRepository.findById(entity.getMunicipality().getId()).orElse(null);
+    entity.setMunicipality(municipality);
+    return entity;
+  }
+
   static Specification<POIEntity> isTrue() {
     return (poi, cq, cb) -> cb.isTrue(cb.literal(true));
   }
 
   static Specification<POIEntity> hasStatus(POIStatus status) {
     return (poi, cq, cb) -> cb.equal(poi.get("status"), status);
+  }
+
+  static Specification<POIEntity> hasMunicipality(Integer id) {
+    return (root, query, criteriaBuilder) -> {
+      Join<POIEntity, MunicipalityEntity> join = root.join("municipality");
+      return criteriaBuilder.equal(join.get("id"), id);
+    };
   }
 
   static Specification<POIEntity> hasId(Integer id) {

@@ -4,7 +4,6 @@ import com.boomers.www.discover_my_city.core.exception.AuthenticationException;
 import com.boomers.www.discover_my_city.core.model.auth.AuthenticationRequest;
 import com.boomers.www.discover_my_city.core.model.auth.AuthenticationResponse;
 import com.boomers.www.discover_my_city.core.model.auth.Token;
-import com.boomers.www.discover_my_city.core.model.user.Role;
 import com.boomers.www.discover_my_city.core.model.user.User;
 import com.boomers.www.discover_my_city.core.repository.TokenRepository;
 import com.boomers.www.discover_my_city.core.repository.UserRepository;
@@ -82,54 +81,6 @@ public class AuthenticationService {
           token.setRevoked(true);
         });
     tokenRepository.updateAll(validUserTokens);
-  }
-
-  public AuthenticationResponse createAdmin() {
-    User user =
-        userRepository.save(
-            new User(
-                "admin",
-                "admin",
-                "admin",
-                "admin@discover.it",
-                passwordEncoder.encode("admin"),
-                Role.ADMIN));
-    String jwtToken = jwtService.generateToken(user);
-    String refreshToken = jwtService.generateRefreshToken(user);
-    saveUserToken(user, jwtToken);
-    return new AuthenticationResponse(jwtToken, refreshToken);
-  }
-
-  public AuthenticationResponse createContributor() {
-    User user =
-        userRepository.save(
-            new User(
-                "contributor",
-                "contributor",
-                "contributor",
-                "contributor@discover.it",
-                passwordEncoder.encode("contributor"),
-                Role.CONTRIBUTOR));
-    String jwtToken = jwtService.generateToken(user);
-    String refreshToken = jwtService.generateRefreshToken(user);
-    saveUserToken(user, jwtToken);
-    return new AuthenticationResponse(jwtToken, refreshToken);
-  }
-
-  public AuthenticationResponse createAuthContributor() {
-    User user =
-        userRepository.save(
-            new User(
-                "auth_contributor",
-                "auth_contributor",
-                "auth_contributor",
-                "auth_contributor@discover.it",
-                passwordEncoder.encode("auth_contributor"),
-                Role.AUTH_CONTRIBUTOR));
-    String jwtToken = jwtService.generateToken(user);
-    String refreshToken = jwtService.generateRefreshToken(user);
-    saveUserToken(user, jwtToken);
-    return new AuthenticationResponse(jwtToken, refreshToken);
   }
 
   public Optional<User> loadUserByUsername(String username) {

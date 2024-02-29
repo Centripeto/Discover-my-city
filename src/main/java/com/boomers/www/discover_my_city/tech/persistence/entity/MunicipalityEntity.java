@@ -14,7 +14,7 @@ public class MunicipalityEntity {
   private String name;
   private String description;
 
-  @OneToMany(mappedBy = "municipality")
+  @OneToMany(mappedBy = "municipality", fetch = FetchType.EAGER)
   private List<EdgeEntity> edges;
 
   public Integer getId() {
@@ -39,5 +39,13 @@ public class MunicipalityEntity {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public List<EdgeEntity> getEdges() {
+    return edges;
+  }
+
+  public void setEdges(List<EdgeEntity> edges) {
+    this.edges = edges;
   }
 }

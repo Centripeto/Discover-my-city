@@ -8,7 +8,7 @@ import java.util.List;
 
 public class AreaPathImpl implements Area {
 
-  List<Coordinate> coordinates;
+  private List<Coordinate> coordinates;
 
   public AreaPathImpl(List<Coordinate> coordinates) {
     this.coordinates = coordinates;
@@ -25,12 +25,23 @@ public class AreaPathImpl implements Area {
 
   @Override
   public boolean isInBounds(Coordinate point) {
+    Mercator mercator = new SphericalMercator();
     Path2D path = new Path2D.Double();
+    boolean isFirst = true;
     for (Coordinate c : coordinates) {
-      path.lineTo(c.getLongitude(), c.getLatitude());
+      if (isFirst) {
+        isFirst = false;
+        path.moveTo(
+            mercator.xAxisProjection(c.getLongitude()), mercator.yAxisProjection(c.getLatitude()));
+      } else {
+        path.lineTo(
+            mercator.xAxisProjection(c.getLongitude()), mercator.yAxisProjection(c.getLatitude()));
+      }
     }
     path.closePath();
-    return path.contains(point.getLongitude(), point.getLatitude());
+    return path.contains(
+        mercator.xAxisProjection(point.getLongitude()),
+        mercator.yAxisProjection(point.getLatitude()));
   }
 
   @Override

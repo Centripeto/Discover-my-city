@@ -14,10 +14,13 @@ import java.util.Objects;
 public class PoiToPoiEntity implements Mapper<POI, POIEntity> {
 
   private final UserToUserEntity userMapper;
+  private final MunicipalityToMunicipalityEntity municipalityMapper;
 
   @Autowired
-  public PoiToPoiEntity(UserToUserEntity userMapper) {
+  public PoiToPoiEntity(
+      UserToUserEntity userMapper, MunicipalityToMunicipalityEntity municipalityMapper) {
     this.userMapper = userMapper;
+    this.municipalityMapper = municipalityMapper;
   }
 
   @Override
@@ -29,7 +32,8 @@ public class PoiToPoiEntity implements Mapper<POI, POIEntity> {
             .addDescription(model.getDescription())
             .addCoordinate(new Coordinate(model.getLatitude(), model.getLongitude()))
             .addCreator(userMapper.from(model.getCreator()))
-            .addStatus(Status.valueOf(model.getStatus().toString()));
+            .addStatus(Status.valueOf(model.getStatus().toString()))
+            .addMunicipality(municipalityMapper.from(model.getMunicipality()));
     if (!Objects.isNull(model.getApprover())) {
       builder.addApprover(userMapper.from(model.getApprover()));
     }
@@ -46,6 +50,7 @@ public class PoiToPoiEntity implements Mapper<POI, POIEntity> {
     poi.setStatus(POIStatus.valueOf(model.getStatus().toString()));
     poi.setName(model.getName());
     poi.setCreator(userMapper.to(model.getCreator()));
+    poi.setMunicipality(municipalityMapper.to(model.getMunicipality()));
     if (!Objects.isNull(model.getApprover())) {
       poi.setApprover(userMapper.to(model.getApprover()));
     }

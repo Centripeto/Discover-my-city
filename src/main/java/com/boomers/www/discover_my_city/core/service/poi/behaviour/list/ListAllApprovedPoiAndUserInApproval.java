@@ -17,6 +17,7 @@ public class ListAllApprovedPoiAndUserInApproval implements ListPoiBehaviour {
   @Override
   public Paged<POI> find(POIRequest request, POIRepository poiRepository) {
     request.setCreator(user);
+    request.setMunicipality(user.getMunicipality());
     return poiRepository.getAllApprovedPoiAndUserInApproval(request);
   }
 }

@@ -8,6 +8,7 @@ public class POIDto {
   private String status;
   private UserDto creator;
   private UserDto approver;
+  private MunicipalityDto municipality;
 
   public void setId(Integer id) {
     this.id = id;
@@ -63,5 +64,13 @@ public class POIDto {
 
   public void setApprover(UserDto approver) {
     this.approver = approver;
+  }
+
+  public MunicipalityDto getMunicipality() {
+    return municipality;
+  }
+
+  public void setMunicipality(MunicipalityDto municipality) {
+    this.municipality = municipality;
   }
 }

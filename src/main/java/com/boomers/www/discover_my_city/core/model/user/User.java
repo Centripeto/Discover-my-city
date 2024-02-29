@@ -4,6 +4,8 @@ import com.boomers.www.discover_my_city.core.model.municipality.Municipality;
 
 public class User {
 
+  private Integer id;
+
   private String name;
 
   private String username;
@@ -21,12 +23,31 @@ public class User {
   public User() {}
 
   public User(
-      String name, String username, String lastname, String email, String password, Role role) {
+      Integer id,
+      String name,
+      String username,
+      String lastname,
+      String email,
+      String password,
+      Role role) {
+    this.id = id;
     this.name = name;
     this.username = username;
     this.lastname = lastname;
     this.email = email;
     this.password = password;
+    this.role = role;
+  }
+
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  public void setRole(Role role) {
     this.role = role;
   }
 
@@ -72,5 +93,13 @@ public class User {
 
   public Role getRole() {
     return role;
+  }
+
+  public Municipality getMunicipality() {
+    return municipality;
+  }
+
+  public void setMunicipality(Municipality municipality) {
+    this.municipality = municipality;
   }
 }

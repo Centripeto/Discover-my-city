@@ -38,4 +38,10 @@ public class UserService implements UserRepository {
   public User save(User user) {
     return mapper.from(repository.save(mapper.to(user)));
   }
+
+  @Override
+  public Optional<User> findById(Integer userId) {
+    Optional<UserEntity> entityOpt = repository.findById(userId);
+    return entityOpt.map(mapper::from);
+  }
 }

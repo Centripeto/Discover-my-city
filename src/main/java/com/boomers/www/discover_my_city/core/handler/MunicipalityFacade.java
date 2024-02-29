@@ -20,9 +20,9 @@ public class MunicipalityFacade {
     municipalityService = new MunicipalityService(municipalityRepository);
   }
 
-    public Municipality createMunicipality(User user, Municipality municipality) throws UnauthorizedException {
-        return municipalityService.createMunicipality(getCreateMunicipalityStrategy(user), municipality);
-    }
+public Municipality createMunicipality(User user, Municipality municipality) throws UnauthorizedException {
+    return municipalityService.createMunicipality(getCreateMunicipalityStrategy(user), municipality);
+}
 
   private CreateMunicipalityBehaviour getCreateMunicipalityStrategy(User user) {
       return switch (user.getRole()) {

@@ -1,8 +1,10 @@
 package com.boomers.www.discover_my_city.utils.mapper;
 
 import com.boomers.www.discover_my_city.api.dto.CoordinateDto;
+import com.boomers.www.discover_my_city.api.dto.MunicipalityDto;
 import com.boomers.www.discover_my_city.api.dto.POIDto;
 import com.boomers.www.discover_my_city.api.dto.UserDto;
+import com.boomers.www.discover_my_city.core.model.municipality.Municipality;
 import com.boomers.www.discover_my_city.core.model.poi.Coordinate;
 import com.boomers.www.discover_my_city.core.model.poi.POI;
 import com.boomers.www.discover_my_city.core.model.poi.Status;
@@ -16,10 +18,13 @@ import java.util.Objects;
 public class PoiToPoiDto implements Mapper<POI, POIDto> {
 
   private final Mapper<User, UserDto> userMapper;
+  private final Mapper<Municipality, MunicipalityDto> municipalityMapper;
 
   @Autowired
-  public PoiToPoiDto(Mapper<User, UserDto> userMapper) {
+  public PoiToPoiDto(
+      Mapper<User, UserDto> userMapper, Mapper<Municipality, MunicipalityDto> municipalityMapper) {
     this.userMapper = userMapper;
+    this.municipalityMapper = municipalityMapper;
   }
 
   @Override
@@ -41,6 +46,9 @@ public class PoiToPoiDto implements Mapper<POI, POIDto> {
     if (!Objects.isNull(model.getApprover())) {
       builder.addApprover(userMapper.from(model.getApprover()));
     }
+    if (!Objects.isNull(model.getMunicipality())) {
+      builder.addMunicipality(municipalityMapper.from(model.getMunicipality()));
+    }
     return builder.build();
   }
 
@@ -59,6 +67,9 @@ public class PoiToPoiDto implements Mapper<POI, POIDto> {
     }
     if (!Objects.isNull(model.getApprover())) {
       poi.setApprover(userMapper.to(model.getApprover()));
+    }
+    if (!Objects.isNull(model.getMunicipality())) {
+      poi.setMunicipality(municipalityMapper.to(model.getMunicipality()));
     }
     return poi;
   }
