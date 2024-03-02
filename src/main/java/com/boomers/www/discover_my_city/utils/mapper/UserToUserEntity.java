@@ -24,7 +24,7 @@ public class UserToUserEntity implements Mapper<User, UserEntity> {
     UserEntity entity = new UserEntity();
     entity.setId(model.getId());
     entity.setName(model.getName());
-    entity.setUsername(model.getName());
+    entity.setUsername(model.getUsername());
     entity.setEmail(model.getEmail());
     entity.setLastname(model.getLastname());
     entity.setPassword(model.getPassword());
